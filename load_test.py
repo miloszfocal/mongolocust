@@ -34,31 +34,31 @@ class MongoSampleUser(MongoUser):
         }
         return document
 
-    @mongodb_task(weight=int(DEFAULTS['AGG_PIPE_WEIGHT']))
-    def run_aggregation_pipeline(self):
-        """
-        Run an aggregation pipeline on a secondary node
-        """
-        # count number of inhabitants per city
-        group_by = {
-            '$group': {
-                '_id': '$city',
-                'total_inhabitants': {'$sum': 1}
-            }
-        }
-
-        # rename the _id to city
-        set_columns = {'$set': {'city': '$_id'}}
-        unset_columns = {'$unset': ['_id']}
-
-        # sort by the number of inhabitants desc
-        order_by = {'$sort': {'total_inhabitants': pymongo.DESCENDING}}
-
-        pipeline = [group_by, set_columns, unset_columns, order_by]
-
-        # make sure we fetch everything by explicitly casting to list
-        # use self.collection instead of self.collection_secondary to run the pipeline on the primary
-        return list(self.collection_secondary.aggregate(pipeline))
+    # @mongodb_task(weight=int(DEFAULTS['AGG_PIPE_WEIGHT']))
+    # def run_aggregation_pipeline(self):
+    #     """
+    #     Run an aggregation pipeline on a secondary node
+    #     """
+    #     # count number of inhabitants per city
+    #     group_by = {
+    #         '$group': {
+    #             '_id': '$city',
+    #             'total_inhabitants': {'$sum': 1}
+    #         }
+    #     }
+    #
+    #     # rename the _id to city
+    #     set_columns = {'$set': {'city': '$_id'}}
+    #     unset_columns = {'$unset': ['_id']}
+    #
+    #     # sort by the number of inhabitants desc
+    #     order_by = {'$sort': {'total_inhabitants': pymongo.DESCENDING}}
+    #
+    #     pipeline = [group_by, set_columns, unset_columns, order_by]
+    #
+    #     # make sure we fetch everything by explicitly casting to list
+    #     # use self.collection instead of self.collection_secondary to run the pipeline on the primary
+    #     return list(self.collection_secondary.aggregate(pipeline))
 
     def on_start(self):
         """
