@@ -25,7 +25,9 @@ class MongoSampleUser(MongoUser):
         """
         Generate a new sample document
         """
+        store_id = self.faker.pydecimal(min_value=0, max_value=10000)
         document = {
+            'store_id': store_id,
             'first_name': self.faker.first_name(),
             'last_name': self.faker.last_name(),
             'address': self.faker.street_address(),

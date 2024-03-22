@@ -2,3 +2,4 @@ locust
 pymongo
 dnspython
 faker
+redis==3.5.3
