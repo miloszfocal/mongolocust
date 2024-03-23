@@ -65,7 +65,7 @@ class MongoUser(User):
         self.collection, self.collection_secondary = None, None
         self.faker = Faker()
 
-    def ensure_collection(self, coll_name, indexes=[], read_preference=pymongo.read_preferences.Secondary()):
+    def ensure_collection(self, coll_name, indexes, read_preference=pymongo.read_preferences.Secondary()):
         """
         Define the collection and its indexes, return two collections objects:
         one for default read preference, the other with the specified read preference.

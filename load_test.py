@@ -8,7 +8,7 @@ import pymongo
 import random
 
 # number of cache entries for queries
-NAMES_TO_CACHE = 10
+NAMES_TO_CACHE = 1000
 
 
 class MongoSampleUser(MongoUser):
@@ -113,8 +113,9 @@ class MongoSampleUser(MongoUser):
         # WITHOUT INDEXES
         # index1 = pymongo.IndexModel([('first_name', pymongo.ASCENDING), ("last_name", pymongo.DESCENDING)],
         #                             name="idx_first_last")
-
-        self.collection, self.collection_secondary = self.ensure_collection(DEFAULTS['COLLECTION_NAME'], [])
+        indexes = []
+        self.collection, self.collection_secondary = self.ensure_collection(DEFAULTS['COLLECTION_NAME'],
+                                                                            indexes=indexes)
         self.name_cache = []
 
     @mongodb_task(weight=int(DEFAULTS['INSERT_WEIGHT']))
@@ -140,10 +141,10 @@ class MongoSampleUser(MongoUser):
         result = self.collection.find_one({'_id': ObjectId(cached_names)})
         # print(f"FIND RESULT: {result}")
 
-        if self.name_cache:
-            print("**************")
-            print(self.name_cache)
-            print("**************")
+        # if self.name_cache:
+        #     print("**************")
+        #     print(self.name_cache)
+        #     print("**************")
 
     # @mongodb_task(weight=int(DEFAULTS['BULK_INSERT_WEIGHT']), batch_size=int(DEFAULTS['DOCS_PER_BATCH']))
     # def insert_documents_bulk(self):
