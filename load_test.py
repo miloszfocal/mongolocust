@@ -25,14 +25,82 @@ class MongoSampleUser(MongoUser):
         """
         Generate a new sample document
         """
-        store_id = self.faker.pydecimal(min_value=0, max_value=10000)
         document = {
-            'store_id': store_id,
-            'first_name': self.faker.first_name(),
-            'last_name': self.faker.last_name(),
-            'address': self.faker.street_address(),
-            'city': self.faker.city(),
-            'total_assets': self.faker.pydecimal(min_value=100, max_value=1000, right_digits=2)
+            "oos_id": self.faker.pyint(min_value=100000000, max_value=900000000000),
+            "stage": self.faker.pystr(),
+            "is_active": self.faker.pybool(),
+            "store_id": self.faker.pyint(min_value=1000, max_value=10000),
+            "department": self.faker.pystr(),
+            "aisle": self.faker.pystr(),
+            "location_key": self.faker.pystr(),
+            "start_time": self.faker.iso8601(),
+            "end_time": self.faker.iso8601(),
+            "max_end_time": self.faker.iso8601(),
+            "valid_at": self.faker.iso8601(),
+            "created_at": self.faker.iso8601(),
+            "updated_at": self.faker.iso8601(),
+            "date": self.faker.date(),
+            "oos_event": [
+                {
+                    "stage": self.faker.pystr(),
+                    "created_at": self.faker.iso8601()
+                },
+                {
+                    "stage": self.faker.pystr(),
+                    "created_at": self.faker.iso8601()
+                },
+                {
+                    "stage": self.faker.pystr(),
+                    "created_at": self.faker.iso8601()
+                }
+            ],
+            "bbox_id": self.faker.pyint(min_value=100000, max_value=999999999),
+            "state": self.faker.pystr(),
+            "reason": self.faker.pystr(min_chars=5, max_chars=10),
+            "source": self.faker.pystr(),
+            "product": {
+                "name": self.faker.pystr(),
+                "brand": self.faker.company(),
+                "image": self.faker.url(),
+                "price": self.faker.pyfloat(positive=True),
+                "upc": self.faker.ean(length=13),
+                "item_number": self.faker.pystr(),
+                "supplier": self.faker.pystr(),
+                "created_at": self.faker.date(),
+                "updated_at": self.faker.date(),
+                "inventory_level": self.faker.pyfloat(positive=True, min_value=1, max_value=100),
+                "product_dimensions": {
+                    "height": self.faker.pyfloat(positive=True, min_value=0.1, max_value=50),
+                    "depth": self.faker.pyfloat(positive=True, min_value=0.1, max_value=50),
+                    "width": self.faker.pyfloat(positive=True, min_value=0.1, max_value=50)
+                },
+                "case_pack": [
+                    {
+                        "upc": self.faker.ean(length=13),
+                        "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
+                        "case_uom": self.faker.pystr(),
+                        "created_at": self.faker.iso8601(),
+                        "pack_size": self.faker.pyint(),
+                        "pack_number": self.faker.pystr()
+                    },
+                    {
+                        "upc": self.faker.ean(length=13),
+                        "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
+                        "case_uom": self.faker.pystr(),
+                        "created_at": self.faker.iso8601(),
+                        "pack_size": self.faker.pyint(),
+                        "pack_number": self.faker.pystr()
+                    },
+                    {
+                        "upc": self.faker.ean(length=13),
+                        "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
+                        "case_uom": self.faker.pystr(),
+                        "created_at": self.faker.iso8601(),
+                        "pack_size": self.faker.pyint(),
+                        "pack_number": self.faker.pystr()
+                    }
+                ]
+            }
         }
         return document
 
