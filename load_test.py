@@ -8,7 +8,7 @@ import pymongo
 import random
 
 # number of cache entries for queries
-NAMES_TO_CACHE = 1000
+NAMES_TO_CACHE = 10
 
 
 class MongoSampleUser(MongoUser):
@@ -126,19 +126,24 @@ class MongoSampleUser(MongoUser):
         if len(self.name_cache) < NAMES_TO_CACHE:
             self.name_cache.append(inserted_result.inserted_id)
         else:
-            if random.randint(0, 9) == 0:
+            if random.randint(0, 5) == 0:
                 self.name_cache[random.randint(0, len(self.name_cache) - 1)] = inserted_result.inserted_id
 
     @mongodb_task(weight=int(DEFAULTS['FIND_WEIGHT']))
     def find_document(self):
-        # at least one insert needs to happen
         if not self.name_cache:
+            # at least one insert needs to happen
             return
 
         # find a random document using an index
         cached_names = random.choice(self.name_cache)
         result = self.collection.find_one({'_id': ObjectId(cached_names)})
-        print(f"FIND RESULT: {result}")
+        # print(f"FIND RESULT: {result}")
+
+        if self.name_cache:
+            print("**************")
+            print(self.name_cache)
+            print("**************")
 
     # @mongodb_task(weight=int(DEFAULTS['BULK_INSERT_WEIGHT']), batch_size=int(DEFAULTS['DOCS_PER_BATCH']))
     # def insert_documents_bulk(self):
