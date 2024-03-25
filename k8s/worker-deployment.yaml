@@ -21,7 +21,7 @@ spec:
         image: adilet123/mongolocust:latest
         resources:
           requests:
-            cpu: "1"
+            cpu: 500m
         imagePullPolicy: Always
         env:
           - name: CLUSTER_URL

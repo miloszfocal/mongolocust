@@ -11,7 +11,7 @@ import time
 import pymongo
 
 # singleton Mongo client
-CLIENT = pymongo.MongoClient(DEFAULTS['CLUSTER_URL'])
+CLIENT = pymongo.MongoClient(DEFAULTS['CLUSTER_URL'], w=0)
 
 
 def mongodb_task(weight=1, batch_size=1):

@@ -2,7 +2,7 @@ import os
 
 DEFAULTS = {'DB_NAME': 'mjtest',
             'COLLECTION_NAME': 'oos',
-            'CLUSTER_URL': f'mongodb+srv://milosz:uNlJ5MtGRbeWJS3z@mjtestm60.er9zh.mongodb.net/sample?retryWrites=true&w=majority',
+            'CLUSTER_URL': f'mongodb+srv://milosz:uNlJ5MtGRbeWJS3z@mjtest80.er9zh.mongodb.net/?retryWrites=true&w=majority&appName=mjtest80',
             'DOCS_PER_BATCH': 100,
             'INSERT_WEIGHT': 1,
             'FIND_WEIGHT': 1,

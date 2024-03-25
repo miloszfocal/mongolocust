@@ -3,6 +3,7 @@ from locust import between
 from mongo_user import MongoUser, mongodb_task
 from settings import DEFAULTS
 from bson import ObjectId
+from pymongo.write_concern import WriteConcern
 
 # hacky overriding HEARTBEAT_VALUE
 ###############################################
@@ -34,8 +35,86 @@ class MongoSampleUser(MongoUser):
         Generate a new sample document
         """
         try:
+            # document = {
+            #     "oos_id": self.faker.pyint(min_value=100000000, max_value=900000000000),
+            #     "stage": self.faker.pystr(),
+            #     "is_active": self.faker.pybool(),
+            #     "store_id": self.faker.pyint(min_value=1000, max_value=10000),
+            #     "department": self.faker.pystr(),
+            #     "aisle": self.faker.pystr(),
+            #     "location_key": self.faker.pystr(),
+            #     "start_time": self.faker.iso8601(),
+            #     "end_time": self.faker.iso8601(),
+            #     "max_end_time": self.faker.iso8601(),
+            #     "valid_at": self.faker.iso8601(),
+            #     "created_at": self.faker.iso8601(),
+            #     "updated_at": self.faker.iso8601(),
+            #     "date": self.faker.date(),
+            #     "oos_event": [
+            #         {
+            #             "stage": self.faker.pystr(),
+            #             "created_at": self.faker.iso8601()
+            #         },
+            #         {
+            #             "stage": self.faker.pystr(),
+            #             "created_at": self.faker.iso8601()
+            #         },
+            #         {
+            #             "stage": self.faker.pystr(),
+            #             "created_at": self.faker.iso8601()
+            #         }
+            #     ],
+            #     "bbox_id": self.faker.pyint(min_value=100000, max_value=999999999),
+            #     "state": self.faker.pystr(),
+            #     "reason": self.faker.pystr(min_chars=5, max_chars=10),
+            #     "source": self.faker.pystr(),
+            #     "product": {
+            #         "name": self.faker.pystr(),
+            #         "brand": self.faker.company(),
+            #         "image": self.faker.url(),
+            #         "price": self.faker.pyfloat(positive=True),
+            #         "upc": self.faker.ean(length=13),
+            #         "item_number": self.faker.pystr(),
+            #         "supplier": self.faker.pystr(),
+            #         "created_at": self.faker.date(),
+            #         "updated_at": self.faker.date(),
+            #         "inventory_level": self.faker.pyfloat(positive=True, min_value=1, max_value=100),
+            #         "product_dimensions": {
+            #             "height": self.faker.pyfloat(positive=True, min_value=1, max_value=50),
+            #             "depth": self.faker.pyfloat(positive=True, min_value=1, max_value=50),
+            #             "width": self.faker.pyfloat(positive=True, min_value=1, max_value=50)
+            #         },
+            #         "case_pack": [
+            #             {
+            #                 "upc": self.faker.ean(length=13),
+            #                 "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
+            #                 "case_uom": self.faker.pystr(),
+            #                 "created_at": self.faker.iso8601(),
+            #                 "pack_size": self.faker.pyint(),
+            #                 "pack_number": self.faker.pystr()
+            #             },
+            #             {
+            #                 "upc": self.faker.ean(length=13),
+            #                 "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
+            #                 "case_uom": self.faker.pystr(),
+            #                 "created_at": self.faker.iso8601(),
+            #                 "pack_size": self.faker.pyint(),
+            #                 "pack_number": self.faker.pystr()
+            #             },
+            #             {
+            #                 "upc": self.faker.ean(length=13),
+            #                 "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
+            #                 "case_uom": self.faker.pystr(),
+            #                 "created_at": self.faker.iso8601(),
+            #                 "pack_size": self.faker.pyint(),
+            #                 "pack_number": self.faker.pystr()
+            #             }
+            #         ]
+            #     }
+            # }
+
             document = {
-                "oos_id": self.faker.pyint(min_value=100000000, max_value=900000000000),
+                "oos_id": self.faker.pyint(min_value=100000000, max_value=9000000000),
                 "stage": self.faker.pystr(),
                 "is_active": self.faker.pybool(),
                 "store_id": self.faker.pyint(min_value=1000, max_value=10000),
@@ -43,67 +122,32 @@ class MongoSampleUser(MongoUser):
                 "aisle": self.faker.pystr(),
                 "location_key": self.faker.pystr(),
                 "start_time": self.faker.iso8601(),
-                "end_time": self.faker.iso8601(),
-                "max_end_time": self.faker.iso8601(),
-                "valid_at": self.faker.iso8601(),
-                "created_at": self.faker.iso8601(),
-                "updated_at": self.faker.iso8601(),
-                "date": self.faker.date(),
                 "oos_event": [
-                    {
-                        "stage": self.faker.pystr(),
-                        "created_at": self.faker.iso8601()
-                    },
-                    {
-                        "stage": self.faker.pystr(),
-                        "created_at": self.faker.iso8601()
-                    },
                     {
                         "stage": self.faker.pystr(),
                         "created_at": self.faker.iso8601()
                     }
                 ],
-                "bbox_id": self.faker.pyint(min_value=100000, max_value=999999999),
+                "bbox_id": self.faker.pyint(min_value=100000, max_value=99999999),
                 "state": self.faker.pystr(),
-                "reason": self.faker.pystr(min_chars=5, max_chars=10),
+                "reason": self.faker.pystr(min_chars=1, max_chars=5),
                 "source": self.faker.pystr(),
                 "product": {
                     "name": self.faker.pystr(),
-                    "brand": self.faker.company(),
                     "image": self.faker.url(),
-                    "price": self.faker.pyfloat(positive=True),
-                    "upc": self.faker.ean(length=13),
-                    "item_number": self.faker.pystr(),
                     "supplier": self.faker.pystr(),
                     "created_at": self.faker.date(),
                     "updated_at": self.faker.date(),
-                    "inventory_level": self.faker.pyfloat(positive=True, min_value=1, max_value=100),
+                    "inventory_level": self.faker.pyfloat(positive=True, min_value=1, max_value=20),
                     "product_dimensions": {
-                        "height": self.faker.pyfloat(positive=True, min_value=1, max_value=50),
-                        "depth": self.faker.pyfloat(positive=True, min_value=1, max_value=50),
-                        "width": self.faker.pyfloat(positive=True, min_value=1, max_value=50)
+                        "height": self.faker.pyfloat(positive=True, min_value=1, max_value=20),
+                        "depth": self.faker.pyfloat(positive=True, min_value=1, max_value=20),
+                        "width": self.faker.pyfloat(positive=True, min_value=1, max_value=20)
                     },
                     "case_pack": [
                         {
                             "upc": self.faker.ean(length=13),
                             "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
-                            "case_uom": self.faker.pystr(),
-                            "created_at": self.faker.iso8601(),
-                            "pack_size": self.faker.pyint(),
-                            "pack_number": self.faker.pystr()
-                        },
-                        {
-                            "upc": self.faker.ean(length=13),
-                            "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
-                            "case_uom": self.faker.pystr(),
-                            "created_at": self.faker.iso8601(),
-                            "pack_size": self.faker.pyint(),
-                            "pack_number": self.faker.pystr()
-                        },
-                        {
-                            "upc": self.faker.ean(length=13),
-                            "case_pack": self.faker.pyfloat(positive=True, min_value=1, max_value=10),
-                            "case_uom": self.faker.pystr(),
                             "created_at": self.faker.iso8601(),
                             "pack_size": self.faker.pyint(),
                             "pack_number": self.faker.pystr()
@@ -136,6 +180,11 @@ class MongoSampleUser(MongoUser):
         document = self.generate_new_document()
 
         inserted_result = self.collection.insert_one(document)
+
+        print("*******************")
+        print("WRITE_CONCERN")
+        print(self.db.write_concern)
+        print("*******************")
 
         if len(self.name_cache) < NAMES_TO_CACHE:
             self.name_cache.append(inserted_result.inserted_id)
