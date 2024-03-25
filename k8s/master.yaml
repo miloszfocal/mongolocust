@@ -5,6 +5,8 @@ metadata:
   labels:
     app: locust-master
 spec:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: locustworkers
   containers:
   - name: locust-master
     image: adilet123/mongolocust:latest

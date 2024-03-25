@@ -4,6 +4,13 @@ from mongo_user import MongoUser, mongodb_task
 from settings import DEFAULTS
 from bson import ObjectId
 
+# hacky overriding HEARTBEAT_VALUE
+###############################################
+from locust import runners
+runners.HEARTBEAT_LIVENESS = 6
+runners.HEARTBEAT_INTERVAL = 2
+###############################################
+
 import pymongo
 import random
 

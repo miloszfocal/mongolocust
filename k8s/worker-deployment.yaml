@@ -14,9 +14,14 @@ spec:
       labels:
         app: locust-worker
     spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: locustworkers
       containers:
       - name: locust-worker
         image: adilet123/mongolocust:latest
+        resources:
+          requests:
+            cpu: "1"
         imagePullPolicy: Always
         env:
           - name: CLUSTER_URL
