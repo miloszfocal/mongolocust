@@ -9,7 +9,7 @@ spec:
     cloud.google.com/gke-nodepool: locustworkers
   containers:
   - name: locust-master
-    image: adilet123/mongolocust:latest
+    image: us-west1-docker.pkg.dev/focal-backend/focal/mj/locust-test:v2.0
     imagePullPolicy: Always
     env:
       - name: CLUSTER_URL
